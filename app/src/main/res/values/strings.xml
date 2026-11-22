@@ -103,6 +103,30 @@
         Aplikacja służy do zgłaszania usterek.
     </string>
 
+    <string name="action_share">
+        Udostępnij zgłoszenie
+    </string>
+
+    <string name="action_clear">
+        Wyczyść formularz
+    </string>
+
+    <string name="action_about">
+        O aplikacji
+    </string>
+
+    <string name="share_title">
+        Udostępnij zgłoszenie przez
+    </string>
+
+    <string name="share_text">
+        Zgłoszenie usterki
+    </string>
+
+    <string name="no_share_app">
+        Brak aplikacji obsługującej udostępnianie.
+    </string>
+
     <string-array name="categories">
         <item>-- wybierz kategorię --</item>
         <item>Sprzęt komputerowy</item>
@@ -111,5 +135,18 @@
         <item>Drukarka</item>
         <item>Inna</item>
     </string-array>
+
+    <string name="form_cleared">
+    Formularz został wyczyszczony.
+</string>
+
+    <string name="share_report_format">
+    Zgłoszenie usterki\n\n
+    Kategoria: %1$s\n
+    Lokalizacja: %2$s\n
+    Priorytet: %3$s\n
+    Opis: %4$s\n
+    Blokuje pracę: %5$s
+</string>
 
 </resources>

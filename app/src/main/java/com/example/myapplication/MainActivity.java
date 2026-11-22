@@ -1,8 +1,11 @@
 package com.example.myapplication;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -103,6 +106,40 @@ public class MainActivity extends AppCompatActivity {
         );
 
         spCategory.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(
+                R.menu.menu_main,
+                menu
+        );
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            shareReport();
+
+            return true;
+
+        } else if (id == R.id.action_clear) {
+            clearForm();
+
+            return true;
+
+        } else if (id == R.id.action_about) {
+            openAbout();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void validateForm() {
@@ -218,6 +255,88 @@ public class MainActivity extends AppCompatActivity {
         );
 
         summaryLauncher.launch(intent);
+    }
+
+    private void clearForm() {
+        spCategory.setSelection(0);
+        etDescription.setText("");
+        etLocation.setText("");
+        rgPriority.clearCheck();
+        cbBlocking.setChecked(false);
+
+        Toast.makeText(
+                this,
+                R.string.form_cleared,
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
+    private void shareReport() {
+        String category = spCategory
+                .getSelectedItem()
+                .toString();
+
+        String description = etDescription
+                .getText()
+                .toString()
+                .trim();
+
+        String location = etLocation
+                .getText()
+                .toString()
+                .trim();
+
+        String priority = getSelectedPriority();
+
+        String blocking = cbBlocking.isChecked()
+                ? getString(R.string.yes)
+                : getString(R.string.no);
+
+        String report = getString(
+                R.string.share_report_format,
+                category,
+                location,
+                priority,
+                description,
+                blocking
+        );
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, report);
+
+        try {
+            startActivity(
+                    Intent.createChooser(
+                            intent,
+                            getString(R.string.share_title)
+                    )
+            );
+
+        } catch (ActivityNotFoundException exception) {
+            Toast.makeText(
+                    this,
+                    R.string.no_share_app,
+                    Toast.LENGTH_SHORT
+            ).show();
+        }
+    }
+
+    private String getSelectedPriority() {
+        int selectedPriorityId =
+                rgPriority.getCheckedRadioButtonId();
+
+        if (selectedPriorityId == R.id.rbLow) {
+            return getString(R.string.priority_low);
+
+        } else if (selectedPriorityId == R.id.rbMedium) {
+            return getString(R.string.priority_medium);
+
+        } else if (selectedPriorityId == R.id.rbHigh) {
+            return getString(R.string.priority_high);
+        }
+
+        return getString(R.string.validation_priority);
     }
 
     private void openAbout() {
