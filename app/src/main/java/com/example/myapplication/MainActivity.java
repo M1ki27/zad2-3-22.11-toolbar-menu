@@ -1,26 +1,30 @@
 package com.example.myapplication;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-    private static final String TAG = "ZgloszenieUsterki";
+public class MainActivity extends AppCompatActivity {
 
     private final ActivityResultLauncher<Intent> summaryLauncher =
             registerForActivityResult(
@@ -54,11 +58,20 @@ public class MainActivity extends AppCompatActivity {
             );
 
     private Toolbar toolbar;
+
     private Spinner spCategory;
     private EditText etDescription;
     private EditText etLocation;
     private RadioGroup rgPriority;
-    private CheckBox cbBlocking;
+
+    private SwitchCompat switchNotifications;
+    private SwitchCompat switchDarkMode;
+    private SwitchCompat switchSound;
+    private SwitchCompat switchAutoSave;
+
+    private ScrollView reportSection;
+    private ScrollView settingsSection;
+    private TextView tvEnabledSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +79,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Log.d(TAG, "MainActivity onCreate");
-
         toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(
-                    getString(R.string.toolbar_main_title)
+                    R.string.toolbar_main_title
             );
         }
 
@@ -82,9 +92,26 @@ public class MainActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         etLocation = findViewById(R.id.etLocation);
         rgPriority = findViewById(R.id.rgPriority);
-        cbBlocking = findViewById(R.id.cbBlocking);
+
+        reportSection = findViewById(R.id.reportSection);
+        settingsSection = findViewById(R.id.settingsSection);
+        tvEnabledSettings = findViewById(R.id.tvEnabledSettings);
+
+        switchNotifications =
+                findViewById(R.id.switchNotifications);
+
+        switchDarkMode =
+                findViewById(R.id.switchDarkMode);
+
+        switchSound =
+                findViewById(R.id.switchSound);
+
+        switchAutoSave =
+                findViewById(R.id.switchAutoSave);
 
         setupCategorySpinner();
+        setupSettingsListeners();
+        setupBottomNavigation();
 
         findViewById(R.id.btnNext)
                 .setOnClickListener(v -> validateForm());
@@ -108,6 +135,133 @@ public class MainActivity extends AppCompatActivity {
         spCategory.setAdapter(adapter);
     }
 
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNavigation =
+                findViewById(R.id.bottomNavigation);
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+
+            if (id == R.id.navigation_report) {
+                showReportSection();
+                return true;
+
+            } else if (id == R.id.navigation_settings) {
+                showSettingsSection();
+                return true;
+            }
+
+            return false;
+        });
+
+        bottomNavigation.setSelectedItemId(
+                R.id.navigation_report
+        );
+    }
+
+    private void showReportSection() {
+        reportSection.setVisibility(View.VISIBLE);
+        settingsSection.setVisibility(View.GONE);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(
+                    R.string.toolbar_main_title
+            );
+        }
+    }
+
+    private void showSettingsSection() {
+        reportSection.setVisibility(View.GONE);
+        settingsSection.setVisibility(View.VISIBLE);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(
+                    R.string.settings_title
+            );
+        }
+
+        updateEnabledSettingsText();
+    }
+
+    private void setupSettingsListeners() {
+        switchNotifications.setOnCheckedChangeListener(
+                (buttonView, isChecked) ->
+                        updateEnabledSettingsText()
+        );
+
+        switchDarkMode.setOnCheckedChangeListener(
+                (buttonView, isChecked) ->
+                        updateEnabledSettingsText()
+        );
+
+        switchSound.setOnCheckedChangeListener(
+                (buttonView, isChecked) ->
+                        updateEnabledSettingsText()
+        );
+
+        switchAutoSave.setOnCheckedChangeListener(
+                (buttonView, isChecked) ->
+                        updateEnabledSettingsText()
+        );
+    }
+
+    private void updateEnabledSettingsText() {
+        StringBuilder enabledSettings =
+                new StringBuilder();
+
+        if (switchNotifications.isChecked()) {
+            addSetting(
+                    enabledSettings,
+                    getString(R.string.settings_notifications)
+            );
+        }
+
+        if (switchDarkMode.isChecked()) {
+            addSetting(
+                    enabledSettings,
+                    getString(R.string.settings_dark_mode)
+            );
+        }
+
+        if (switchSound.isChecked()) {
+            addSetting(
+                    enabledSettings,
+                    getString(R.string.settings_sound)
+            );
+        }
+
+        if (switchAutoSave.isChecked()) {
+            addSetting(
+                    enabledSettings,
+                    getString(R.string.settings_auto_save)
+            );
+        }
+
+        if (enabledSettings.length() == 0) {
+            tvEnabledSettings.setText(
+                    R.string.settings_none_enabled
+            );
+        } else {
+            tvEnabledSettings.setText(
+                    getString(
+                            R.string.settings_enabled,
+                            enabledSettings.toString()
+                    )
+            );
+        }
+    }
+
+    private void addSetting(
+            StringBuilder builder,
+            String setting
+    ) {
+        if (builder.length() > 0) {
+            builder.append(", ");
+        }
+
+        builder.append(setting);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(
@@ -120,22 +274,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         if (id == R.id.action_share) {
             shareReport();
-
             return true;
 
         } else if (id == R.id.action_clear) {
             clearForm();
-
             return true;
 
         } else if (id == R.id.action_about) {
             openAbout();
+            return true;
 
+        } else if (id == R.id.action_reset_defaults) {
+            showResetDialog();
             return true;
         }
 
@@ -222,7 +376,9 @@ public class MainActivity extends AppCompatActivity {
             priority = getString(R.string.priority_high);
         }
 
-        boolean blocking = cbBlocking.isChecked();
+        boolean blocking = findViewById(
+                R.id.cbBlocking
+        ).isSelected();
 
         Intent intent = new Intent(
                 this,
@@ -262,7 +418,9 @@ public class MainActivity extends AppCompatActivity {
         etDescription.setText("");
         etLocation.setText("");
         rgPriority.clearCheck();
-        cbBlocking.setChecked(false);
+
+        findViewById(R.id.cbBlocking)
+                .setSelected(false);
 
         Toast.makeText(
                 this,
@@ -288,7 +446,9 @@ public class MainActivity extends AppCompatActivity {
 
         String priority = getSelectedPriority();
 
-        String blocking = cbBlocking.isChecked()
+        String blocking = findViewById(
+                R.id.cbBlocking
+        ).isSelected()
                 ? getString(R.string.yes)
                 : getString(R.string.no);
 
@@ -339,6 +499,30 @@ public class MainActivity extends AppCompatActivity {
         return getString(R.string.validation_priority);
     }
 
+    private void showResetDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.reset_title)
+                .setMessage(R.string.reset_message)
+                .setNegativeButton(
+                        R.string.reset_no,
+                        null
+                )
+                .setPositiveButton(
+                        R.string.reset_yes,
+                        (dialog, which) -> resetSettings()
+                )
+                .show();
+    }
+
+    private void resetSettings() {
+        switchNotifications.setChecked(false);
+        switchDarkMode.setChecked(false);
+        switchSound.setChecked(false);
+        switchAutoSave.setChecked(false);
+
+        updateEnabledSettingsText();
+    }
+
     private void openAbout() {
         Intent intent = new Intent(
                 this,
@@ -346,19 +530,5 @@ public class MainActivity extends AppCompatActivity {
         );
 
         startActivity(intent);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        Log.d(TAG, "MainActivity onStop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        Log.d(TAG, "MainActivity onDestroy");
     }
 }

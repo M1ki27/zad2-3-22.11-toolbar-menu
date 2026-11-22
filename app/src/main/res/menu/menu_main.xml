@@ -19,4 +19,9 @@
         android:title="@string/action_about"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_reset_defaults"
+        android:title="@string/action_reset_defaults"
+        app:showAsAction="never" />
+
 </menu>

@@ -115,16 +115,81 @@
         O aplikacji
     </string>
 
+    <string name="action_reset_defaults">
+        Przywróć domyślne
+    </string>
+
     <string name="share_title">
         Udostępnij zgłoszenie przez
     </string>
 
-    <string name="share_text">
-        Zgłoszenie usterki
-    </string>
-
     <string name="no_share_app">
         Brak aplikacji obsługującej udostępnianie.
+    </string>
+
+    <string name="form_cleared">
+        Formularz został wyczyszczony.
+    </string>
+
+    <string name="share_report_format">
+        Zgłoszenie usterki\n\n
+        Kategoria: %1$s\n
+        Lokalizacja: %2$s\n
+        Priorytet: %3$s\n
+        Opis: %4$s\n
+        Blokuje pracę: %5$s
+    </string>
+
+    <string name="navigation_report">
+        Zgłoszenie
+    </string>
+
+    <string name="navigation_settings">
+        Ustawienia
+    </string>
+
+    <string name="settings_title">
+        Ustawienia
+    </string>
+
+    <string name="settings_notifications">
+        Powiadomienia
+    </string>
+
+    <string name="settings_dark_mode">
+        Tryb ciemny
+    </string>
+
+    <string name="settings_sound">
+        Dźwięk
+    </string>
+
+    <string name="settings_auto_save">
+        Automatyczny zapis
+    </string>
+
+    <string name="settings_none_enabled">
+        Żadne ustawienie nie jest włączone.
+    </string>
+
+    <string name="settings_enabled">
+        Włączone opcje: %1$s
+    </string>
+
+    <string name="reset_title">
+        Przywrócić domyślne?
+    </string>
+
+    <string name="reset_message">
+        Wszystkie przełączniki zostaną wyłączone.
+    </string>
+
+    <string name="reset_yes">
+        Przywróć
+    </string>
+
+    <string name="reset_no">
+        Anuluj
     </string>
 
     <string-array name="categories">
@@ -135,18 +200,5 @@
         <item>Drukarka</item>
         <item>Inna</item>
     </string-array>
-
-    <string name="form_cleared">
-    Formularz został wyczyszczony.
-</string>
-
-    <string name="share_report_format">
-    Zgłoszenie usterki\n\n
-    Kategoria: %1$s\n
-    Lokalizacja: %2$s\n
-    Priorytet: %3$s\n
-    Opis: %4$s\n
-    Blokuje pracę: %5$s
-</string>
 
 </resources>
