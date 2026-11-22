@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
                     }
             );
 
+    private Toolbar toolbar;
     private Spinner spCategory;
     private EditText etDescription;
     private EditText etLocation;
@@ -62,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d(TAG, "MainActivity onCreate");
+
+        toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(
+                    getString(R.string.toolbar_main_title)
+            );
+        }
 
         spCategory = findViewById(R.id.spCategory);
         etDescription = findViewById(R.id.etDescription);

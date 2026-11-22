@@ -1,9 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
 
     <string name="app_name">Zgłoszenie usterki</string>
 
-    <string name="header_form">Zgłoszenie usterki</string>
-    <string name="category_label">Kategoria usterki</string>
+    <string name="toolbar_main_title">
+        Zgłoszenie usterki
+    </string>
+
+    <string name="header_form">
+        Zgłoszenie usterki
+    </string>
+
+    <string name="category_label">
+        Kategoria usterki
+    </string>
 
     <string name="description_hint">
         Opisz dokładnie problem
@@ -33,20 +44,12 @@
         O aplikacji
     </string>
 
-    <string name="about_title">
-        O aplikacji
-    </string>
-
-    <string name="about_text">
-        Aplikacja służy do zgłaszania usterek w pracowni komputerowej.\n\n
-        Użytkownik podaje kategorię, opis, lokalizację i priorytet usterki.\n\n
-        Aplikacja demonstruje działanie trzech ekranów, intencji jawnych,
-        przekazywania danych przez putExtra oraz zwracania wyniku przez
-        ActivityResultLauncher.
-    </string>
-
     <string name="summary_header">
         Podgląd zgłoszenia
+    </string>
+
+    <string name="summary_title_with_category">
+        Podgląd: %1$s
     </string>
 
     <string name="edit">
@@ -90,6 +93,14 @@
         Priorytet: %3$s\n
         Opis: %4$s\n
         Blokuje pracę: %5$s
+    </string>
+
+    <string name="about_title">
+        O aplikacji
+    </string>
+
+    <string name="about_text">
+        Aplikacja służy do zgłaszania usterek.
     </string>
 
     <string-array name="categories">

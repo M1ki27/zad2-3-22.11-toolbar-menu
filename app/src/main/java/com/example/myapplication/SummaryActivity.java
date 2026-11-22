@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.Random;
 
@@ -31,6 +32,7 @@ public class SummaryActivity extends AppCompatActivity {
     public static final String EXTRA_NUMBER =
             "com.example.myapplication.NUMBER";
 
+    private Toolbar toolbar;
     private TextView tvSummary;
 
     @Override
@@ -40,6 +42,25 @@ public class SummaryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_summary);
 
         Log.d(TAG, "SummaryActivity onCreate");
+
+        toolbar = findViewById(R.id.toolbarSummary);
+
+        setSupportActionBar(toolbar);
+
+        String category = getIntent()
+                .getStringExtra(EXTRA_CATEGORY);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(
+                    getString(
+                            R.string.summary_title_with_category,
+                            category
+                    )
+            );
+
+            getSupportActionBar()
+                    .setDisplayHomeAsUpEnabled(true);
+        }
 
         tvSummary = findViewById(R.id.tvSummary);
 
@@ -107,6 +128,13 @@ public class SummaryActivity extends AppCompatActivity {
         );
 
         finish();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+
+        return true;
     }
 
     @Override
